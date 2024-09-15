@@ -68,7 +68,8 @@ nav ul li {
     position: relative;
 }
 
-nav ul li a {
+nav ul li a,
+.theme-switch a {
     display: flex;
     align-items: center;
     color: #fff;
@@ -76,56 +77,39 @@ nav ul li a {
     font-weight: 600;
     padding: 5px 0;
     line-height: 60px;
+    position: relative;
 }
 
-nav ul li a i {
+nav ul li a i,
+.theme-switch a i {
     margin-right: 0.5rem;
+    transition: transform 0.5s ease;
 }
 
-/* Underline animation */
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #3498db; /* Change this to your preferred color */
-    transition: width 0.3s ease;
+nav ul li a:hover i,
+.theme-switch a:hover i {
+    animation: pendulum 0.5s ease-in-out infinite alternate;
 }
 
-nav ul li a:hover::after {
-    width: 100%;
+@keyframes pendulum {
+    0% {
+        transform: rotate(-20deg);
+    }
+    100% {
+        transform: rotate(20deg);
+    }
 }
 
-.theme-switch a {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 5px 0;
-}
-
-.theme-switch a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #3498db; /* Change this to your preferred color */
-    transition: width 0.3s ease;
-}
-
-.theme-switch a:hover::after {
-    width: 100%;
-}
-
-#theme-icon {
-    font-size: 1.2rem;
+/* Ensure no conflicting styles */
+nav ul li a,
+nav ul li a:hover,
+.theme-switch a,
+.theme-switch a:hover,
+nav ul li a i,
+nav ul li a:hover i,
+.theme-switch a i,
+.theme-switch a:hover i {
+    transition: transform 0.5s ease;
 }
 
 /* Remove all click animations */
@@ -138,6 +122,57 @@ nav ul li a:hover,
     transition: none;
     transform: none;
     animation: none;
+}
+
+/* Explicitly add pendulum animation for theme icon */
+.theme-switch a:hover #theme-icon {
+    animation: pendulum 0.5s ease-in-out infinite alternate;
+}
+
+/* Underline animation */
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 15px;
+    left: 0;
+    background-color: #15ef32; /* Change this to your preferred color */
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+.theme-switch a {
+    display: flex;
+    align-items: center;
+    gap: 0rem;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 5px 0;
+}
+
+.theme-switch a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 15;
+    left: 0;
+    background-color: #15ef32; /* Change this to your preferred color */
+    transition: width 0.3s ease;
+}
+
+.theme-switch a:hover::after {
+    width: 100%;
+}
+
+#theme-icon {
+    font-size: 1.2rem;
 }
 
 @media (max-width: 767px) {
@@ -193,7 +228,7 @@ nav ul li a:hover,
 
     nav ul li a::after,
     .theme-switch a::after {
-        bottom: -5px; /* Adjust this value if needed for mobile */
+        bottom: 0px; /* Adjust this value if needed for mobile */
     }
 }
 
@@ -255,22 +290,36 @@ nav ul li a:hover,
     opacity: 1;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 .hero-content h1 {
-    font-size: 3.5rem;
+    font-size: 3.8rem;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    font-family: 'Oswald', sans-serif;
-    font-weight: 700;
+    font-family: 'Abril Fatface', normal;
+    font-weight: 400;
     letter-spacing: 2px;
     color: #ffffff;
-    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    width: 0;
+    animation: typing 5s steps(12) infinite;
 }
 
-.hero-content h1 .first-name,
-.hero-content h1 .last-name {
-    color: #ffffff;
+@keyframes typing {
+    0%, 100% {
+        width: 0;
+        border-right: 3px solid;
+    }
+    20%, 80% {
+        width: 100%;
+        border-right: 3px solid;
+    }
+    30%, 70% {
+        border-right: 3px solid transparent;
+    }
 }
 
 .hero p {
