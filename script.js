@@ -53,55 +53,6 @@ function hideLoadingOverlay() {
     }, 500);
 }
 
-function preloadImages(callback) {
-    const slideshow = document.querySelector('.slideshow');
-    const images = Array.from(slideshow.querySelectorAll('div')).map(div => {
-        const url = div.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/, '$1');
-        return url;
-    });
-
-    let loadedImages = 0;
-    images.forEach(url => {
-        const img = new Image();
-        img.onload = img.onerror = () => {
-            loadedImages++;
-            if (loadedImages === images.length) {
-                callback();
-            }
-        };
-        img.src = url;
-    });
-}
-
-function startSlideshow() {
-    const slides = document.querySelectorAll('.slideshow div');
-    let currentSlide = 0;
-    let slideOrder = [...Array(slides.length).keys()];
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    function showNextSlide() {
-        slides[slideOrder[currentSlide]].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slideOrder.length;
-        slides[slideOrder[currentSlide]].classList.add('active');
-    }
-
-    shuffleArray(slideOrder);
-    slides[slideOrder[0]].classList.add('active');
-
-    setInterval(() => {
-        showNextSlide();
-        if (currentSlide === 0) {
-            shuffleArray(slideOrder);
-        }
-    }, 6000);
-}
-
 function closeMenu() {
     const nav = document.querySelector('nav');
     const hamburger = document.querySelector('.hamburger i');
@@ -245,12 +196,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Setup loader color change
     setupLoaderColorChange();
 
-    // Preload images and start slideshow
-    preloadImages(() => {
+    // Hide loading overlay after a short delay (e.g., 2 seconds)
+    setTimeout(() => {
         clearInterval(loadingTextInterval);
         hideLoadingOverlay();
-        startSlideshow();
-    });
+    }, 2000);
 });
 
 // Add this new function
