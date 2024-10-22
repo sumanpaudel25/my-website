@@ -15,6 +15,8 @@ body {
     background-color: #f8f9fa;
     overflow-x: hidden;
     position: relative;
+    --loader-border-color: #333;
+    --loader-fill-color: #333;
 }
 
 .container {
@@ -719,6 +721,8 @@ footer {
 body.dark-mode {
   background-color: #1a1a1a;
   color: #f0f0f0;
+  --loader-border-color: #fff;
+  --loader-fill-color: #fff;
 }
 
 body.dark-mode .nav-container {
@@ -794,7 +798,7 @@ body.dark-mode .map-container h3 {
 .loader {
     width: 30px;
     height: 30px;
-    border: 2px solid #333;
+    border: 2px solid var(--loader-border-color);
     position: relative;
     animation: rotate 4s ease-in-out infinite;
 }
@@ -806,7 +810,7 @@ body.dark-mode .map-container h3 {
     left: 0;
     right: 0;
     animation: fillAndEmpty 4s ease-in-out infinite;
-    background-color: black;
+    background-color: var(--loader-fill-color);
 }
 
 @keyframes rotate {

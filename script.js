@@ -242,10 +242,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start showing loading texts
     const loadingTextInterval = showLoadingText();
 
+    // Setup loader color change
+    setupLoaderColorChange();
+
     // Preload images and start slideshow
     preloadImages(() => {
-        clearInterval(loadingTextInterval); // Stop changing loading text
+        clearInterval(loadingTextInterval);
         hideLoadingOverlay();
         startSlideshow();
     });
 });
+
+// Add this new function
+function setupLoaderColorChange() {
+    const colors = ['yellow', 'red', 'blue', 'green'];
+    const duration = 4000; // 4s
+
+    function getRandomColor() {
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    const rotationTimes = [
+        duration * 0.4038,
+        duration * 0.9038
+    ];
+
+    function updateFillColor() {
+        const root = document.documentElement;
+        root.style.setProperty('--loader-fill-color', getRandomColor());
+    }
+
+    rotationTimes.forEach(time => {
+        setTimeout(() => {
+            updateFillColor();
+            setInterval(updateFillColor, duration);
+        }, time);
+    });
+}
