@@ -169,24 +169,17 @@ document.addEventListener('DOMContentLoaded', function() {
         let loadedImages = 0;
 
         return Promise.all(images.map(img => {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 if (img.complete) {
                     loadedImages++;
                     updateLoadingProgress(loadedImages, totalImages);
                     resolve();
                 } else {
-                    const newImg = new Image();
-                    newImg.onload = function() {
+                    img.onload = img.onerror = () => {
                         loadedImages++;
                         updateLoadingProgress(loadedImages, totalImages);
                         resolve();
                     };
-                    newImg.onerror = function() {
-                        loadedImages++;
-                        updateLoadingProgress(loadedImages, totalImages);
-                        reject();
-                    };
-                    newImg.src = img.src;
                 }
             });
         }));
@@ -203,12 +196,16 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingOverlay.style.opacity = '0';
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
-            mainContent.style.display = 'block';
-            setTimeout(() => {
-                mainContent.style.opacity = '1';
-            }, 50);
+            mainContent.style.opacity = '1';
         }, 500);
     }
+
+    // Show main content immediately, but keep it transparent
+    mainContent.style.display = 'block';
+    mainContent.style.opacity = '0';
+
+    // Start loading animation
+    setupLoaderColorChange();
 
     // Preload images and show content when done
     preloadImages()
