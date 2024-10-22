@@ -162,60 +162,44 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingOverlay = document.querySelector('.loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
-    const loadingTexts = [
-        "Preparing your experience...",
-        "Loading amazing content...",
-        "Just a moment while we set things up...",
-        "Getting everything ready for you...",
-        "Almost there, hang tight!"
-    ];
-    let currentTextIndex = 0;
-    let loadingTextInterval;
-
-    function updateLoadingText() {
-        loadingText.textContent = loadingTexts[currentTextIndex];
-        currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
-    }
-
     // Function to preload images
     function preloadImages() {
-        const images = document.querySelectorAll('img');
+        const images = Array.from(document.querySelectorAll('img'));
         const totalImages = images.length;
         let loadedImages = 0;
 
-        return new Promise((resolve) => {
-            if (totalImages === 0) resolve();
-
-            images.forEach(img => {
+        return Promise.all(images.map(img => {
+            return new Promise((resolve, reject) => {
                 if (img.complete) {
                     loadedImages++;
                     updateLoadingProgress(loadedImages, totalImages);
-                    if (loadedImages === totalImages) resolve();
+                    resolve();
                 } else {
-                    img.addEventListener('load', function() {
+                    const newImg = new Image();
+                    newImg.onload = function() {
                         loadedImages++;
                         updateLoadingProgress(loadedImages, totalImages);
-                        if (loadedImages === totalImages) resolve();
-                    });
-                    img.addEventListener('error', function() {
+                        resolve();
+                    };
+                    newImg.onerror = function() {
                         loadedImages++;
                         updateLoadingProgress(loadedImages, totalImages);
-                        if (loadedImages === totalImages) resolve();
-                    });
+                        reject();
+                    };
+                    newImg.src = img.src;
                 }
             });
-        });
+        }));
     }
 
     // Function to update loading progress
     function updateLoadingProgress(loaded, total) {
         const progress = Math.round((loaded / total) * 100);
-        loadingText.textContent = `${loadingTexts[currentTextIndex]} (${progress}%)`;
+        loadingText.textContent = `Loading... ${progress}%`;
     }
 
     // Function to hide loading overlay and show main content
     function showContent() {
-        clearInterval(loadingTextInterval);
         loadingOverlay.style.opacity = '0';
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
@@ -226,14 +210,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
 
-    // Start cycling through loading texts
-    updateLoadingText(); // Show first text immediately
-    loadingTextInterval = setInterval(updateLoadingText, 3000);
-
     // Preload images and show content when done
-    preloadImages().then(() => {
-        showContent();
-    });
+    preloadImages()
+        .then(() => {
+            // Add a small delay to ensure all images are rendered
+            setTimeout(showContent, 100);
+        })
+        .catch(error => {
+            console.error('Error loading images:', error);
+            showContent(); // Show content even if some images fail to load
+        });
 
     setupLoaderColorChange();
 });
