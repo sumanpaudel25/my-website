@@ -22,6 +22,37 @@ function toggleMenu() {
     }
 }
 
+function showLoadingText() {
+    const loadingTexts = [
+        "Preparing your experience...",
+        "Loading amazing content...",
+        "Just a moment while we set things up...",
+        "Getting everything ready for you...",
+        "Almost there, hang tight!"
+    ];
+    let currentTextIndex = 0;
+    const loadingTextElement = document.getElementById('loading-text');
+
+    function updateLoadingText() {
+        loadingTextElement.textContent = loadingTexts[currentTextIndex];
+        currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
+    }
+
+    updateLoadingText(); // Show first text immediately
+    return setInterval(updateLoadingText, 3000);
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const mainContent = document.getElementById('main-content');
+    
+    loadingOverlay.style.opacity = '0';
+    setTimeout(() => {
+        loadingOverlay.style.display = 'none';
+        mainContent.style.display = 'block';
+    }, 500);
+}
+
 function preloadImages(callback) {
     const slideshow = document.querySelector('.slideshow');
     const images = Array.from(slideshow.querySelectorAll('div')).map(div => {
@@ -40,14 +71,6 @@ function preloadImages(callback) {
         };
         img.src = url;
     });
-}
-
-function hideLoadingOverlay() {
-    const loadingOverlay = document.querySelector('.loading-overlay');
-    loadingOverlay.style.opacity = '0';
-    setTimeout(() => {
-        loadingOverlay.style.display = 'none';
-    }, 500);
 }
 
 function startSlideshow() {
@@ -216,12 +239,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Start showing loading texts
+    const loadingTextInterval = showLoadingText();
+
     // Preload images and start slideshow
     preloadImages(() => {
+        clearInterval(loadingTextInterval); // Stop changing loading text
         hideLoadingOverlay();
         startSlideshow();
     });
 });
-
-// The window.addEventListener('load', startSlideshow) is now removed
-// as we start the slideshow after preloading images
