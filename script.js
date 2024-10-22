@@ -256,26 +256,38 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add this new function
 function setupLoaderColorChange() {
     const colors = ['yellow', 'red', 'blue', 'green'];
-    const duration = 4000; // 4s
+    const duration = 4000; // 4s for a full rotation
 
     function getRandomColor() {
         return colors[Math.floor(Math.random() * colors.length)];
     }
-
-    const rotationTimes = [
-        duration * 0.4038,
-        duration * 0.9038
-    ];
 
     function updateFillColor() {
         const root = document.documentElement;
         root.style.setProperty('--loader-fill-color', getRandomColor());
     }
 
-    rotationTimes.forEach(time => {
-        setTimeout(() => {
-            updateFillColor();
-            setInterval(updateFillColor, duration);
-        }, time);
-    });
+    // Calculate timings for 720-degree rotations (40.38% and 90.38% of 4s)
+    const rotationTimes = [
+        duration * 0.4038,  // First 720 degrees (40.38% of 4s)
+        duration * 0.9038   // Second 720 degrees (90.38% of 4s)
+    ];
+
+    // Schedule color changes at each 720-degree rotation
+    function scheduleColorChanges() {
+        rotationTimes.forEach(time => {
+            setTimeout(updateFillColor, time);
+        });
+    }
+
+    // Initial color change
+    updateFillColor();
+
+    // Schedule initial color changes
+    scheduleColorChanges();
+
+    // Set up interval to continue color changes every 4 seconds
+    setInterval(() => {
+        scheduleColorChanges();
+    }, duration);
 }
