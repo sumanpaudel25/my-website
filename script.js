@@ -1,3 +1,102 @@
+// Add this code at the beginning of your script.js file
+
+// Main loader functionality
+document.addEventListener("DOMContentLoaded", function() {
+    const loader = document.getElementById("loader-wrapper");
+    const content = document.getElementById("content");
+    const loadingText = document.getElementById("loading-text");
+    
+    const loadingMessages = [
+        "Building site for you",
+        "Almost there",
+        "Getting things ready",
+        "Loading final pieces"
+    ];
+    let messageIndex = 0;
+
+    function updateLoadingMessage() {
+        if (loadingText) {
+            messageIndex = (messageIndex + 1) % loadingMessages.length;
+            loadingText.innerHTML = loadingMessages[messageIndex] + '<span class="dots">...</span>';
+        }
+    }
+
+    const messageInterval = setInterval(updateLoadingMessage, 3000);
+
+    function hideLoader() {
+        clearInterval(messageInterval);
+        loader.classList.add("loader-hidden");
+        content.classList.add("visible");
+        
+        loader.addEventListener("transitionend", function() {
+            loader.remove();
+        });
+    }
+
+    window.addEventListener("load", function() {
+        setTimeout(hideLoader, 500);
+    });
+
+    setTimeout(hideLoader, 5000);
+});
+
+// Progress tracking functionality
+document.addEventListener("DOMContentLoaded", function() {
+    let loaded = 0;
+    const total = document.images.length + 
+                 document.scripts.length + 
+                 document.links.length;
+    
+    function updateProgress() {
+        loaded++;
+        const percentage = ((loaded / total) * 100).toFixed(0);
+        
+        const loadingText = document.getElementById("loading-text");
+        if (loadingText && percentage < 100) {
+            loadingText.innerHTML = `Building site for you<span class="dots">...</span> ${percentage}%`;
+        }
+        
+        console.log(`Loading: ${percentage}%`);
+    }
+
+    Array.from(document.images).forEach(img => {
+        if (img.complete) {
+            updateProgress();
+        } else {
+            img.addEventListener('load', updateProgress);
+            img.addEventListener('error', updateProgress);
+        }
+    });
+
+    Array.from(document.scripts).forEach(script => {
+        if (script.complete) {
+            updateProgress();
+        } else {
+            script.addEventListener('load', updateProgress);
+            script.addEventListener('error', updateProgress);
+        }
+    });
+
+    Array.from(document.links).forEach(link => {
+        if (link.rel === 'stylesheet') {
+            if (link.complete) {
+                updateProgress();
+            } else {
+                link.addEventListener('load', updateProgress);
+                link.addEventListener('error', updateProgress);
+            }
+        }
+    });
+});
+
+// Loading time tracking
+const startTime = performance.now();
+window.addEventListener('load', function() {
+    const loadTime = (performance.now() - startTime).toFixed(2);
+    console.log(`Page loaded in ${loadTime}ms`);
+});
+
+// ... rest of your existing JavaScript code ...
 function toggleMenu() {
     const nav = document.querySelector('nav');
     const hamburger = document.querySelector('.hamburger i');

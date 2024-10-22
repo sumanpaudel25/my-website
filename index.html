@@ -6,19 +6,25 @@
     <title>Suman Paudel - Civil Engineer</title>
     <link rel="icon" href="Images/favicon.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="loader">
-            <i class="fas fa-hard-hat"></i>
-            <i class="fas fa-drafting-compass"></i>
-            <i class="fas fa-ruler"></i>
+    <div id="loader-wrapper">
+        <div id="loader">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
         </div>
-        <p>Building your experience...</p>
+        <div id="loading-text">Building site for you<span class="dots">...</span></div>
     </div>
+    <div id="content">
     <div class="nav-container">
         <a href="#home">
             <img src="Images/favicon.png" alt="Favicon" class="logo">
@@ -162,8 +168,8 @@
             <a href="https://t.me/sumanpaudel" target="_blank"><i class="fab fa-telegram"></i></a>
         </div>
     </footer>
+</div>
 
     <script src="script.js"></script>
-    <script src="preloader.js"></script>
 </body>
 </html>
