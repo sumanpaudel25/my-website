@@ -158,86 +158,81 @@ document.querySelectorAll('nav ul li a, .theme-switch a').forEach(link => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const themeSwitch = document.querySelector('.theme-switch');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    // Check for saved theme preference or default to 'light'
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.body.classList.add(currentTheme);
-    updateThemeIcon(currentTheme);
+    const mainContent = document.getElementById('main-content');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const loadingText = document.getElementById('loading-text');
 
-    themeSwitch.addEventListener('click', function() {
-        if (document.body.classList.contains('dark')) {
-            document.body.classList.remove('dark');
-            document.body.classList.add('light');
-            localStorage.setItem('theme', 'light');
-            updateThemeIcon('light');
-        } else {
-            document.body.classList.remove('light');
-            document.body.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            updateThemeIcon('dark');
-        }
-    });
+    // Function to preload images
+    function preloadImages() {
+        const images = document.querySelectorAll('img');
+        const totalImages = images.length;
+        let loadedImages = 0;
 
-    function updateThemeIcon(theme) {
-        if (theme === 'dark') {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
-        } else {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
-        }
+        return new Promise((resolve) => {
+            if (totalImages === 0) resolve();
+
+            images.forEach(img => {
+                if (img.complete) {
+                    loadedImages++;
+                    updateLoadingProgress(loadedImages, totalImages);
+                    if (loadedImages === totalImages) resolve();
+                } else {
+                    img.addEventListener('load', function() {
+                        loadedImages++;
+                        updateLoadingProgress(loadedImages, totalImages);
+                        if (loadedImages === totalImages) resolve();
+                    });
+                    img.addEventListener('error', function() {
+                        loadedImages++;
+                        updateLoadingProgress(loadedImages, totalImages);
+                        if (loadedImages === totalImages) resolve();
+                    });
+                }
+            });
+        });
     }
 
-    // Start showing loading texts
-    const loadingTextInterval = showLoadingText();
+    // Function to update loading progress
+    function updateLoadingProgress(loaded, total) {
+        const progress = Math.round((loaded / total) * 100);
+        loadingText.textContent = `Loading... ${progress}%`;
+    }
 
-    // Setup loader color change
+    // Function to hide loading overlay and show main content
+    function showContent() {
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+            mainContent.style.display = 'block';
+            setTimeout(() => {
+                mainContent.style.opacity = '1';
+            }, 50);
+        }, 500);
+    }
+
+    // Preload images and show content when done
+    preloadImages().then(() => {
+        showContent();
+    });
+
     setupLoaderColorChange();
-
-    // Hide loading overlay after a short delay (e.g., 2 seconds)
-    setTimeout(() => {
-        clearInterval(loadingTextInterval);
-        hideLoadingOverlay();
-    }, 2000);
 });
 
 // Add this new function
 function setupLoaderColorChange() {
-    const colors = ['yellow', 'red', 'blue', 'green'];
+    const colors = ['#ffeb3b', '#f44336', '#2196f3', '#4caf50']; // Yellow, Red, Blue, Green
     const duration = 4000; // 4s for a full rotation
-
-    function getRandomColor() {
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
+    let currentColorIndex = 0;
 
     function updateFillColor() {
         const root = document.documentElement;
-        root.style.setProperty('--loader-fill-color', getRandomColor());
+        root.style.setProperty('--loader-fill-color', colors[currentColorIndex]);
+        currentColorIndex = (currentColorIndex + 1) % colors.length;
     }
 
-    // Calculate timings for 720-degree rotations (40.38% and 90.38% of 4s)
-    const rotationTimes = [
-        duration * 0.4038,  // First 720 degrees (40.38% of 4s)
-        duration * 0.9038   // Second 720 degrees (90.38% of 4s)
-    ];
-
-    // Schedule color changes at each 720-degree rotation
-    function scheduleColorChanges() {
-        rotationTimes.forEach(time => {
-            setTimeout(updateFillColor, time);
-        });
-    }
+    // Update color every second (4 times during the 4-second animation)
+    setInterval(updateFillColor, 1000);
 
     // Initial color change
     updateFillColor();
-
-    // Schedule initial color changes
-    scheduleColorChanges();
-
-    // Set up interval to continue color changes every 4 seconds
-    setInterval(() => {
-        scheduleColorChanges();
-    }, duration);
 }
