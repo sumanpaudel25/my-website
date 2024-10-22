@@ -223,6 +223,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// The window.addEventListener('load', startSlideshow) is now commented out
+// The window.addEventListener('load', startSlideshow) is now removed
 // as we start the slideshow after preloading images
-// window.addEventListener('load', startSlideshow);
