@@ -162,6 +162,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingOverlay = document.querySelector('.loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
+    const loadingTexts = [
+        "Preparing your experience...",
+        "Loading amazing content...",
+        "Just a moment while we set things up...",
+        "Getting everything ready for you...",
+        "Almost there, hang tight!"
+    ];
+    let currentTextIndex = 0;
+    let loadingTextInterval;
+
+    function updateLoadingText() {
+        loadingText.textContent = loadingTexts[currentTextIndex];
+        currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
+    }
+
     // Function to preload images
     function preloadImages() {
         const images = document.querySelectorAll('img');
@@ -195,11 +210,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to update loading progress
     function updateLoadingProgress(loaded, total) {
         const progress = Math.round((loaded / total) * 100);
-        loadingText.textContent = `Loading... ${progress}%`;
+        loadingText.textContent = `${loadingTexts[currentTextIndex]} (${progress}%)`;
     }
 
     // Function to hide loading overlay and show main content
     function showContent() {
+        clearInterval(loadingTextInterval);
         loadingOverlay.style.opacity = '0';
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
@@ -209,6 +225,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 50);
         }, 500);
     }
+
+    // Start cycling through loading texts
+    updateLoadingText(); // Show first text immediately
+    loadingTextInterval = setInterval(updateLoadingText, 3000);
 
     // Preload images and show content when done
     preloadImages().then(() => {
