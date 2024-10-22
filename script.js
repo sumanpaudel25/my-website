@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     const messageInterval = setInterval(updateLoadingMessage, 3000);
-
+    
     function hideLoader() {
         clearInterval(messageInterval);
         loader.classList.add("loader-hidden");
@@ -37,8 +37,22 @@ document.addEventListener("DOMContentLoaded", function() {
         setTimeout(hideLoader, 500);
     });
 
-    setTimeout(hideLoader, 5000);
+    setTimeout(hideLoader, 10000);
 });
+ // Preload slideshow images
+ function preloadSlideshowImages() {
+    const slides = document.querySelectorAll('.slideshow div');
+    const imagePromises = Array.from(slides).map(slide => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = getComputedStyle(slide).backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+
+    return Promise.all(imagePromises);
+}
 
 // Progress tracking functionality
 document.addEventListener("DOMContentLoaded", function() {
@@ -91,9 +105,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Loading time tracking
 const startTime = performance.now();
-window.addEventListener('load', function() {
-    const loadTime = (performance.now() - startTime).toFixed(2);
-    console.log(`Page loaded in ${loadTime}ms`);
+window.addEventListener("load", function() {
+    preloadSlideshowImages().then(() => {
+        setTimeout(hideLoader, 500);
+    }).catch(error => {
+        console.error("Error preloading images:", error);
+        setTimeout(hideLoader, 500);
+    });
 });
 
 // ... rest of your existing JavaScript code ...
