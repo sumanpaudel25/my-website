@@ -1,120 +1,53 @@
-// Add this code at the beginning of your script.js file
+function showLoadingAnimation() {
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = '<div class="loader"></div>';
+    document.body.appendChild(loadingOverlay);
 
-// Main loader functionality
-document.addEventListener("DOMContentLoaded", function() {
-    const loader = document.getElementById("loader-wrapper");
-    const content = document.getElementById("content");
-    const loadingText = document.getElementById("loading-text");
-    
-    const loadingMessages = [
-        "Building site for you",
-        "Almost there",
-        "Getting things ready",
-        "Loading final pieces"
+    const colors = ['yellow', 'red', 'blue', 'green'];
+    const loader = loadingOverlay.querySelector('.loader');
+    const duration = 4000; // 4s duration
+
+    function getRandomColor() {
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    const rotationTimes = [
+        duration * 0.4038,
+        duration * 0.9038
     ];
-    let messageIndex = 0;
 
-    function updateLoadingMessage() {
-        if (loadingText) {
-            messageIndex = (messageIndex + 1) % loadingMessages.length;
-            loadingText.innerHTML = loadingMessages[messageIndex] + '<span class="dots">...</span>';
-        }
-    }
-
-    const messageInterval = setInterval(updateLoadingMessage, 3000);
-    
-    function hideLoader() {
-        clearInterval(messageInterval);
-        loader.classList.add("loader-hidden");
-        content.classList.add("visible");
+    function updateFillColor() {
+        const pseudoStyle = document.createElement('style');
+        pseudoStyle.innerHTML = `.loader::after { background-color: ${getRandomColor()} !important; }`;
         
-        loader.addEventListener("transitionend", function() {
-            loader.remove();
-        });
+        const oldStyle = document.querySelector('#dynamic-style');
+        if (oldStyle) oldStyle.remove();
+        
+        pseudoStyle.id = 'dynamic-style';
+        document.head.appendChild(pseudoStyle);
     }
 
-    window.addEventListener("load", function() {
-        setTimeout(hideLoader, 500);
+    rotationTimes.forEach(time => {
+        setTimeout(() => {
+            updateFillColor();
+            setInterval(() => {
+                updateFillColor();
+            }, duration);
+        }, time);
     });
-
-    setTimeout(hideLoader, 10000);
-});
- // Preload slideshow images
- function preloadSlideshowImages() {
-    const slides = document.querySelectorAll('.slideshow div');
-    const imagePromises = Array.from(slides).map(slide => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = getComputedStyle(slide).backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
-            img.onload = resolve;
-            img.onerror = reject;
-        });
-    });
-
-    return Promise.all(imagePromises);
 }
 
-// Progress tracking functionality
-document.addEventListener("DOMContentLoaded", function() {
-    let loaded = 0;
-    const total = document.images.length + 
-                 document.scripts.length + 
-                 document.links.length;
-    
-    function updateProgress() {
-        loaded++;
-        const percentage = ((loaded / total) * 100).toFixed(0);
-        
-        const loadingText = document.getElementById("loading-text");
-        if (loadingText && percentage < 100) {
-            loadingText.innerHTML = `Building site for you<span class="dots">...</span> ${percentage}%`;
-        }
-        
-        console.log(`Loading: ${percentage}%`);
+function hideLoadingAnimation() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+            loadingOverlay.remove();
+        }, 500); // Fade out animation duration
     }
+}
 
-    Array.from(document.images).forEach(img => {
-        if (img.complete) {
-            updateProgress();
-        } else {
-            img.addEventListener('load', updateProgress);
-            img.addEventListener('error', updateProgress);
-        }
-    });
-
-    Array.from(document.scripts).forEach(script => {
-        if (script.complete) {
-            updateProgress();
-        } else {
-            script.addEventListener('load', updateProgress);
-            script.addEventListener('error', updateProgress);
-        }
-    });
-
-    Array.from(document.links).forEach(link => {
-        if (link.rel === 'stylesheet') {
-            if (link.complete) {
-                updateProgress();
-            } else {
-                link.addEventListener('load', updateProgress);
-                link.addEventListener('error', updateProgress);
-            }
-        }
-    });
-});
-
-// Loading time tracking
-const startTime = performance.now();
-window.addEventListener("load", function() {
-    preloadSlideshowImages().then(() => {
-        setTimeout(hideLoader, 500);
-    }).catch(error => {
-        console.error("Error preloading images:", error);
-        setTimeout(hideLoader, 500);
-    });
-});
-
-// ... rest of your existing JavaScript code ...
 function toggleMenu() {
     const nav = document.querySelector('nav');
     const hamburger = document.querySelector('.hamburger i');
@@ -143,6 +76,9 @@ function startSlideshow() {
     const slides = document.querySelectorAll('.slideshow div');
     let currentSlide = 0;
     let slideOrder = [...Array(slides.length).keys()];
+    let imagesLoaded = 0;
+
+    showLoadingAnimation();
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -157,16 +93,29 @@ function startSlideshow() {
         slides[slideOrder[currentSlide]].classList.add('active');
     }
 
-    shuffleArray(slideOrder);
-    slides[slideOrder[0]].classList.add('active');
-
-    setInterval(() => {
-        showNextSlide();
-        if (currentSlide === 0) {
+    function checkAllImagesLoaded() {
+        imagesLoaded++;
+        if (imagesLoaded === slides.length) {
+            hideLoadingAnimation();
             shuffleArray(slideOrder);
+            slides[slideOrder[0]].classList.add('active');
+            setInterval(() => {
+                showNextSlide();
+                if (currentSlide === 0) {
+                    shuffleArray(slideOrder);
+                }
+            }, 6000);
         }
-    }, 6000);
+    }
+
+    slides.forEach(slide => {
+        const img = new Image();
+        img.src = slide.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/, '$1');
+        img.onload = checkAllImagesLoaded;
+        img.onerror = checkAllImagesLoaded; // Count errors as loaded to avoid infinite loading
+    });
 }
+
 
 function closeMenu() {
     const nav = document.querySelector('nav');
