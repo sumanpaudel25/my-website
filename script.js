@@ -164,25 +164,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to preload images
     function preloadImages() {
-        const images = Array.from(document.querySelectorAll('img'));
+        const images = document.querySelectorAll('img');
         const totalImages = images.length;
         let loadedImages = 0;
 
-        return Promise.all(images.map(img => {
-            return new Promise((resolve) => {
+        return new Promise((resolve) => {
+            if (totalImages === 0) resolve();
+
+            images.forEach(img => {
                 if (img.complete) {
                     loadedImages++;
                     updateLoadingProgress(loadedImages, totalImages);
-                    resolve();
+                    if (loadedImages === totalImages) resolve();
                 } else {
-                    img.onload = img.onerror = () => {
+                    img.addEventListener('load', function() {
                         loadedImages++;
                         updateLoadingProgress(loadedImages, totalImages);
-                        resolve();
-                    };
+                        if (loadedImages === totalImages) resolve();
+                    });
+                    img.addEventListener('error', function() {
+                        loadedImages++;
+                        updateLoadingProgress(loadedImages, totalImages);
+                        if (loadedImages === totalImages) resolve();
+                    });
                 }
             });
-        }));
+        });
     }
 
     // Function to update loading progress
@@ -196,27 +203,17 @@ document.addEventListener('DOMContentLoaded', function() {
         loadingOverlay.style.opacity = '0';
         setTimeout(() => {
             loadingOverlay.style.display = 'none';
-            mainContent.style.opacity = '1';
+            mainContent.style.display = 'block';
+            setTimeout(() => {
+                mainContent.style.opacity = '1';
+            }, 50);
         }, 500);
     }
 
-    // Show main content immediately, but keep it transparent
-    mainContent.style.display = 'block';
-    mainContent.style.opacity = '0';
-
-    // Start loading animation
-    setupLoaderColorChange();
-
     // Preload images and show content when done
-    preloadImages()
-        .then(() => {
-            // Add a small delay to ensure all images are rendered
-            setTimeout(showContent, 100);
-        })
-        .catch(error => {
-            console.error('Error loading images:', error);
-            showContent(); // Show content even if some images fail to load
-        });
+    preloadImages().then(() => {
+        showContent();
+    });
 
     setupLoaderColorChange();
 });
