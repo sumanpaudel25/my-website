@@ -1,53 +1,3 @@
-function showLoadingAnimation() {
-    const loadingOverlay = document.createElement('div');
-    loadingOverlay.className = 'loading-overlay';
-    loadingOverlay.innerHTML = '<div class="loader"></div>';
-    document.body.appendChild(loadingOverlay);
-
-    const colors = ['yellow', 'red', 'blue', 'green'];
-    const loader = loadingOverlay.querySelector('.loader');
-    const duration = 4000; // 4s duration
-
-    function getRandomColor() {
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    const rotationTimes = [
-        duration * 0.4038,
-        duration * 0.9038
-    ];
-
-    function updateFillColor() {
-        const pseudoStyle = document.createElement('style');
-        pseudoStyle.innerHTML = `.loader::after { background-color: ${getRandomColor()} !important; }`;
-        
-        const oldStyle = document.querySelector('#dynamic-style');
-        if (oldStyle) oldStyle.remove();
-        
-        pseudoStyle.id = 'dynamic-style';
-        document.head.appendChild(pseudoStyle);
-    }
-
-    rotationTimes.forEach(time => {
-        setTimeout(() => {
-            updateFillColor();
-            setInterval(() => {
-                updateFillColor();
-            }, duration);
-        }, time);
-    });
-}
-
-function hideLoadingAnimation() {
-    const loadingOverlay = document.querySelector('.loading-overlay');
-    if (loadingOverlay) {
-        loadingOverlay.style.opacity = '0';
-        setTimeout(() => {
-            loadingOverlay.remove();
-        }, 500); // Fade out animation duration
-    }
-}
-
 function toggleMenu() {
     const nav = document.querySelector('nav');
     const hamburger = document.querySelector('.hamburger i');
@@ -72,13 +22,38 @@ function toggleMenu() {
     }
 }
 
+function preloadImages(callback) {
+    const slideshow = document.querySelector('.slideshow');
+    const images = Array.from(slideshow.querySelectorAll('div')).map(div => {
+        const url = div.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/, '$1');
+        return url;
+    });
+
+    let loadedImages = 0;
+    images.forEach(url => {
+        const img = new Image();
+        img.onload = img.onerror = () => {
+            loadedImages++;
+            if (loadedImages === images.length) {
+                callback();
+            }
+        };
+        img.src = url;
+    });
+}
+
+function hideLoadingOverlay() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    loadingOverlay.style.opacity = '0';
+    setTimeout(() => {
+        loadingOverlay.style.display = 'none';
+    }, 500);
+}
+
 function startSlideshow() {
     const slides = document.querySelectorAll('.slideshow div');
     let currentSlide = 0;
     let slideOrder = [...Array(slides.length).keys()];
-    let imagesLoaded = 0;
-
-    showLoadingAnimation();
 
     function shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -93,29 +68,16 @@ function startSlideshow() {
         slides[slideOrder[currentSlide]].classList.add('active');
     }
 
-    function checkAllImagesLoaded() {
-        imagesLoaded++;
-        if (imagesLoaded === slides.length) {
-            hideLoadingAnimation();
+    shuffleArray(slideOrder);
+    slides[slideOrder[0]].classList.add('active');
+
+    setInterval(() => {
+        showNextSlide();
+        if (currentSlide === 0) {
             shuffleArray(slideOrder);
-            slides[slideOrder[0]].classList.add('active');
-            setInterval(() => {
-                showNextSlide();
-                if (currentSlide === 0) {
-                    shuffleArray(slideOrder);
-                }
-            }, 6000);
         }
-    }
-
-    slides.forEach(slide => {
-        const img = new Image();
-        img.src = slide.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/, '$1');
-        img.onload = checkAllImagesLoaded;
-        img.onerror = checkAllImagesLoaded; // Count errors as loaded to avoid infinite loading
-    });
+    }, 6000);
 }
-
 
 function closeMenu() {
     const nav = document.querySelector('nav');
@@ -167,8 +129,6 @@ window.addEventListener('scroll', () => {
         }
     });
 });
-
-window.addEventListener('load', startSlideshow);
 
 const themeIcon = document.getElementById('theme-icon');
 const body = document.body;
@@ -255,4 +215,14 @@ document.addEventListener('DOMContentLoaded', function() {
             themeIcon.classList.add('fa-sun');
         }
     }
+
+    // Preload images and start slideshow
+    preloadImages(() => {
+        hideLoadingOverlay();
+        startSlideshow();
+    });
 });
+
+// The window.addEventListener('load', startSlideshow) is now commented out
+// as we start the slideshow after preloading images
+// window.addEventListener('load', startSlideshow);
