@@ -15,8 +15,6 @@ body {
     background-color: #f8f9fa;
     overflow-x: hidden;
     position: relative;
-    --loader-border-color: #333;
-    --loader-fill-color: #333;
 }
 
 .container {
@@ -26,7 +24,7 @@ body {
 }
 
 .nav-container {
-    background: linear-gradient(135deg, #34495e, #2c3e50);
+    background: linear-gradient(135deg, rgba(52, 73, 94, 0.8), rgba(44, 62, 80, 0.8));
     color: #fff;
     padding: 0 20px;
     position: fixed;
@@ -38,6 +36,8 @@ body {
     align-items: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     height: 60px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .logo {
@@ -82,14 +82,12 @@ nav ul li a,
     position: relative;
 }
 
-nav ul li a i,
-.theme-switch a i {
+nav ul li a i {
     margin-right: 0.5rem;
     transition: transform 0.5s ease;
 }
 
-nav ul li a:hover i,
-.theme-switch a:hover i {
+nav ul li a:hover i {
     animation: pendulum 0.5s ease-in-out infinite alternate;
 }
 
@@ -105,22 +103,14 @@ nav ul li a:hover i,
 /* Ensure no conflicting styles */
 nav ul li a,
 nav ul li a:hover,
-.theme-switch a,
-.theme-switch a:hover,
 nav ul li a i,
-nav ul li a:hover i,
-.theme-switch a i,
-.theme-switch a:hover i {
+nav ul li a:hover i {
     transition: transform 0.5s ease;
 }
 
 /* Remove all click animations */
 nav ul li a,
-nav ul li a:hover,
-.theme-switch a,
-.theme-switch a:hover,
-#theme-icon,
-#theme-icon:hover {
+nav ul li a:hover {
     transition: none;
     transform: none;
     animation: none;
@@ -147,35 +137,7 @@ nav ul li a:hover::after {
     width: 100%;
 }
 
-.theme-switch a {
-    display: flex;
-    align-items: center;
-    gap: 0rem;
-    cursor: pointer;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 5px 0;
-}
 
-.theme-switch a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 15;
-    left: 0;
-    background-color: #15ef32; /* Change this to your preferred color */
-    transition: width 0.3s ease;
-}
-
-.theme-switch a:hover::after {
-    width: 100%;
-}
-
-#theme-icon {
-    font-size: 1.2rem;
-}
 
 @media (max-width: 767px) {
     .hamburger {
@@ -252,7 +214,7 @@ nav ul li a:hover::after {
     width: 100%;
     height: 100%;
     background-size: cover;
-    background-position: center 40%; /* Adjusted to move the view slightly up */
+    background-position: center 25%; /* Adjusted to move the view slightly up */
     background-image: url('Images/suman.webp');
     z-index: -1;
 }
@@ -310,8 +272,8 @@ nav ul li a:hover::after {
     font-size: 3.8rem;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    font-family: 'Abril Fatface', normal;
-    font-weight: 400;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
     letter-spacing: 2px;
     color: #ffffff;
     white-space: nowrap;
@@ -377,7 +339,7 @@ nav ul li a:hover::after {
 
 .btn {
     display: inline-block;
-    background: linear-gradient(135deg, #3498db, #2ecc71);
+    background: #365c46;
     color: #fff;
     padding: 0.75rem 1.5rem;
     text-decoration: none;
@@ -428,43 +390,73 @@ nav ul li a:hover::after {
 }
 
 section {
-    padding: 5rem 0;
+    position: relative;
+    padding: 4rem 0;
+}
+
+#about p {
+    text-align: justify;
+}
+
+section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #3498db, transparent);
 }
 
 section h2 {
     font-family: 'Playfair Display', serif;
     text-align: center;
-    margin-bottom: 3rem;
-    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #2c3e50;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+section h2 i {
+    font-size: 1.8rem;
+    color: #3498db;
+}
+
+section h3 {
+    text-align: center;
+    margin-bottom: 1.5rem;
     color: #34495e;
-    position: relative;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+section h3 i {
+    font-size: 1.3rem;
+    color: #3498db;
 }
 
 section h2::before {
-    content: '';
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: -40px;
+    position: static;
+    transform: none;
+    top: auto;
     font-size: 2rem;
-    color: #3498db;
+    color: #2c3e50;
+    margin: 0;
 }
 
 #about h2::before { content: '\f007'; }
 #skills h2::before { content: '\f19d'; }
 #projects h2::before { content: '\f0b1'; }
 #contact h2::before { content: '\f0e0'; }
-
-section h2::after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 3px;
-    background: linear-gradient(to right, #3498db, #2ecc71);
-    margin: 10px auto 0;
-}
 
 .grid {
     display: grid;
@@ -497,11 +489,19 @@ section h2::after {
 .card i {
     font-size: 3rem;
     margin-bottom: 1rem;
-    background: linear-gradient(135deg, #3498db, #2ecc71);
+    background: linear-gradient(135deg, #2c3e50, #34495e);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.card:hover i {
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    background-clip: text;
+    -webkit-background-clip: text;
+    transform: scale(1.1);
 }
 
 #contact form {
@@ -529,7 +529,7 @@ section h2::after {
 }
 
 #contact form button {
-    background: linear-gradient(135deg, #3498db, #2ecc71);
+    background: #7e3a3a;
     color: #fff;
     border: none;
     padding: 1rem;
@@ -541,7 +541,8 @@ section h2::after {
 }
 
 #contact form button:hover {
-    transform: translateY(-3px);
+    background: #2b5977;
+    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -728,61 +729,11 @@ footer {
     animation: slideOut 0.3s forwards;
 }
 
-/* Dark mode styles */
-body.dark-mode {
-  background-color: #1a1a1a;
-  color: #f0f0f0;
-  --loader-border-color: #fff;
-  --loader-fill-color: #fff;
-}
 
-body.dark-mode .nav-container {
-  background: linear-gradient(135deg, #2c3e50, #34495e);
-}
-
-body.dark-mode h2 {
-  color: white;
-}
-
-body.dark-mode .card {
-  background-color: #2c3e50;
-  color: white;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-  transition: box-shadow 0.3s ease;
-}
-
-/* Card glow effect on hover in dark mode */
-body.dark-mode .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 30px rgba(52, 152, 219, 0.8), 0 0 10px rgba(52, 152, 219, 1);
-}
-
-body.dark-mode #contact form input,
-body.dark-mode #contact form textarea {
-  background-color: #2c3e50;
-  color: #f0f0f0;
-  border-color: #4a6572;
-}
-
-body.dark-mode #contact form input:focus,
-body.dark-mode #contact form textarea:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.4);
-}
-
-body.dark-mode .card h3 {
-  color: #ffffff;
-}
-
-body.dark-mode .map-container h3 {
-    color: #ffffff;
-}
 
 .download-btn i {
     margin-left: 5px;
 }
-/* ... existing styles ... */
-/* Add these styles at the end of your existing CSS file */
 
 .loading-overlay {
     position: fixed;
@@ -796,20 +747,20 @@ body.dark-mode .map-container h3 {
     align-items: center;
     z-index: 9999;
     transition: opacity 0.5s ease;
-    background-color: var(--background-color);
+    background-color: #f8f9fa;
 }
 
 #loading-text {
     margin-top: 20px;
     font-size: 18px;
     text-align: center;
-    color: var(--text-color);
+    color: #333;
 }
 
 .loader {
     width: 30px;
     height: 30px;
-    border: 2px solid var(--loader-border-color);
+    border: 2px solid #333;
     position: relative;
     animation: rotate 4s ease-in-out infinite;
 }
@@ -820,7 +771,7 @@ body.dark-mode .map-container h3 {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--loader-fill-color);
+    background-color: #333;
     animation: fillAndEmpty 4s ease-in-out infinite;
 }
 
@@ -846,17 +797,6 @@ body.dark-mode .map-container h3 {
     71.15% { height: 100%; }
     90.38% { height: 0%; }
     100% { height: 0%; }
-}
-
-/* Add these CSS variables */
-:root {
-    --loader-border-color: #333;
-    --loader-fill-color: #333;
-}
-
-body.dark-mode {
-    --loader-border-color: #fff;
-    --loader-fill-color: #fff;
 }
 
 

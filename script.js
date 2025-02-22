@@ -104,65 +104,11 @@ window.addEventListener('scroll', () => {
     });
 });
 
-const themeIcon = document.getElementById('theme-icon');
-const body = document.body;
-
-// Check for saved theme preference or default to 'light'
-let currentTheme = localStorage.getItem('theme') || 'light';
-
-// Function to update the icon and apply the theme
-function setTheme(theme) {
-    body.classList.remove('light-mode', 'dark-mode');
-    
-    if (theme === 'dark') {
-        themeIcon.className = 'fas fa-moon';
-        body.classList.add('dark-mode');
-    } else {
-        themeIcon.className = 'fas fa-sun';
-        body.classList.add('light-mode');
-    }
-    
-    localStorage.setItem('theme', theme);
-    currentTheme = theme;
-}
-
-// Apply the current theme on page load
-setTheme(currentTheme);
-
-// Toggle theme when the icon is clicked
-document.querySelector('.theme-switch').addEventListener('click', (e) => {
-    e.preventDefault();
-    setTheme(currentTheme === 'light' ? 'dark' : 'light');
-});
-
-// Listen for system theme changes
-if (window.matchMedia) {
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
-        if (currentTheme === 'system') {
-            setTheme('system');
-        }
-    });
-}
-
-// Remove any click animations
-document.querySelectorAll('nav ul li a, .theme-switch a').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const href = link.getAttribute('href');
-        if (href && href !== '#') {
-            setTimeout(() => {
-                window.location.href = href;
-            }, 10);
-        }
-    });
-});
-
 document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('main-content');
     const loadingOverlay = document.querySelector('.loading-overlay');
     const loadingText = document.getElementById('loading-text');
 
-    // Function to preload images
     function preloadImages() {
         const images = document.querySelectorAll('img');
         const totalImages = images.length;
@@ -192,13 +138,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Function to update loading progress
     function updateLoadingProgress(loaded, total) {
         const progress = Math.round((loaded / total) * 100);
         loadingText.textContent = `Loading... ${progress}%`;
     }
 
-    // Function to hide loading overlay and show main content
     function showContent() {
         loadingOverlay.style.opacity = '0';
         setTimeout(() => {
@@ -210,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 500);
     }
 
-    // Preload images and show content when done
     preloadImages().then(() => {
         showContent();
     });
@@ -218,10 +161,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setupLoaderColorChange();
 });
 
-// Add this new function
 function setupLoaderColorChange() {
-    const colors = ['#ffeb3b', '#f44336', '#2196f3', '#4caf50']; // Yellow, Red, Blue, Green
-    const duration = 4000; // 4s for a full rotation
+    const colors = ['#ffeb3b', '#f44336', '#2196f3', '#4caf50'];
+    const duration = 4000;
     let currentColorIndex = 0;
 
     function updateFillColor() {
@@ -230,9 +172,6 @@ function setupLoaderColorChange() {
         currentColorIndex = (currentColorIndex + 1) % colors.length;
     }
 
-    // Update color every second (4 times during the 4-second animation)
     setInterval(updateFillColor, 1000);
-
-    // Initial color change
     updateFillColor();
 }
