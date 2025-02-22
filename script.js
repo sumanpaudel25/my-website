@@ -105,58 +105,6 @@ window.addEventListener('scroll', () => {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const mainContent = document.getElementById('main-content');
-    const loadingOverlay = document.querySelector('.loading-overlay');
-    const loadingText = document.getElementById('loading-text');
-
-    function preloadImages() {
-        const images = document.querySelectorAll('img');
-        const totalImages = images.length;
-        let loadedImages = 0;
-
-        return new Promise((resolve) => {
-            if (totalImages === 0) resolve();
-
-            images.forEach(img => {
-                if (img.complete) {
-                    loadedImages++;
-                    updateLoadingProgress(loadedImages, totalImages);
-                    if (loadedImages === totalImages) resolve();
-                } else {
-                    img.addEventListener('load', function() {
-                        loadedImages++;
-                        updateLoadingProgress(loadedImages, totalImages);
-                        if (loadedImages === totalImages) resolve();
-                    });
-                    img.addEventListener('error', function() {
-                        loadedImages++;
-                        updateLoadingProgress(loadedImages, totalImages);
-                        if (loadedImages === totalImages) resolve();
-                    });
-                }
-            });
-        });
-    }
-
-    function updateLoadingProgress(loaded, total) {
-        const progress = Math.round((loaded / total) * 100);
-        loadingText.textContent = `Loading... ${progress}%`;
-    }
-
-    function showContent() {
-        loadingOverlay.style.opacity = '0';
-        setTimeout(() => {
-            loadingOverlay.style.display = 'none';
-            mainContent.style.display = 'block';
-            setTimeout(() => {
-                mainContent.style.opacity = '1';
-            }, 50);
-        }, 500);
-    }
-
-    preloadImages().then(() => {
-        showContent();
-    });
 
     setupLoaderColorChange();
 });
