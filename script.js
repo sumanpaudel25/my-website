@@ -92,7 +92,8 @@ document.querySelector('.scroll-arrow').addEventListener('click', function() {
 });
 
 window.addEventListener('scroll', () => {
-    const cards = document.querySelectorAll('.card');
+    // Exclude cards in skills and projects sections from animations
+    const cards = document.querySelectorAll('.card:not(#skills .card):not(#projects .card)');
     cards.forEach(card => {
         const cardTop = card.getBoundingClientRect().top;
         const triggerBottom = window.innerHeight / 5 * 4;
@@ -102,12 +103,89 @@ window.addEventListener('scroll', () => {
             card.style.transform = 'translateY(0) scale(1)';
         }
     });
+    
+    // Make skills and projects cards always visible
+    const skillsProjectsCards = document.querySelectorAll('#skills .card, #projects .card');
+    skillsProjectsCards.forEach(card => {
+        card.style.opacity = '1';
+        card.style.transform = 'none';
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-
+    // Add loading animation
+    const loadingInterval = showLoadingText();
+    
+    // Hide loading overlay after content loads
+    setTimeout(() => {
+        hideLoadingOverlay();
+        clearInterval(loadingInterval);
+    }, 1500);
+    
     setupLoaderColorChange();
+    
+    // Add form submission animation
+    setupFormAnimation();
+    
+    // Add scroll reveal animation for sections
+    setupScrollReveal();
 });
+
+// Form animation
+function setupFormAnimation() {
+    const form = document.querySelector('#contact form');
+    const inputs = document.querySelectorAll('#contact form input, #contact form textarea');
+    
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.classList.add('border-pulse');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.classList.remove('border-pulse');
+        });
+    });
+    
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            const button = this.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            button.classList.add('sending');
+            // Form submission continues normally
+        });
+    }
+}
+
+// Scroll reveal animation
+function setupScrollReveal() {
+    // Only apply animations to sections other than skills and projects
+    const sections = document.querySelectorAll('section:not(#skills):not(#projects)');
+    const skillsProjects = document.querySelectorAll('#skills, #projects');
+    
+    const observerOptions = {
+        threshold: 0.25,
+        rootMargin: '0px'
+    };
+    
+    const sectionObserver = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-stagger');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        sectionObserver.observe(section);
+    });
+    
+    // Make skills and projects sections always visible
+    skillsProjects.forEach(section => {
+        section.style.opacity = '1';
+    });
+}
 
 function setupLoaderColorChange() {
     const colors = ['#ffeb3b', '#f44336', '#2196f3', '#4caf50'];

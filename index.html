@@ -8,9 +8,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Roboto+Slab:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animation.css">
+    <link rel="stylesheet" href="loading-animation.css">
 </head>
 <body>
-    <div id="main-content">
+    <div class="loading-overlay">
+        <div class="loader">
+            <div class="loader-circle"></div>
+            <div class="loader-circle-inner"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-progress">
+                <div class="loader-progress-bar"></div>
+            </div>
+        </div>
+        <p id="loading-text">Loading amazing content...</p>
+    </div>
+    <div id="main-content" style="display: none;">
     <div class="nav-container">
         <a href="#home">
             <img src="Images/favicon.png" alt="Favicon" class="logo">
