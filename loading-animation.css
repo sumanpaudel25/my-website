@@ -133,15 +133,7 @@
 }
 
 #loading-text::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: var(--loader-primary);
-    transform: translateX(-50%);
-    animation: loadingUnderline 2s ease-in-out infinite;
+    display: none;
 }
 
 /* Animations */
