@@ -91,16 +91,12 @@ document.querySelector('.scroll-arrow').addEventListener('click', function() {
     aboutSection.scrollIntoView({ behavior: 'smooth' });
 });
 
+// Removed scroll animation for better mobile experience
 window.addEventListener('scroll', () => {
     const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
-        const cardTop = card.getBoundingClientRect().top;
-        const triggerBottom = window.innerHeight / 5 * 4;
-
-        if (cardTop < triggerBottom) {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0) scale(1)';
-        }
+        card.style.opacity = '1';
+        card.style.transform = 'none';
     });
 });
 
