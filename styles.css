@@ -309,6 +309,82 @@ nav ul li a:hover::after {
 
 .social-icons {
     display: flex;
+}
+
+.contact-info-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 768px) {
+    .contact-info-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    overflow: visible;
+    word-break: break-all;
+}
+
+.contact-item:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contact-item i {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.contact-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    overflow: visible;
+    width: 100%;
+}
+
+.contact-label {
+    font-size: 0.9rem;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.contact-label::after {
+    content: ":";
+    margin-left: 2px;
+}
+
+.contact-details a {
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    word-break: break-all;
+    overflow: visible;
+}
+
+.contact-details a:hover {
+    color: #3498db;
+}
+
+.social-icons {    
+    display: flex;
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
