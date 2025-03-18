@@ -540,44 +540,86 @@ section h2::before {
     gap: 2rem;
 }
 
+@media (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .card {
     background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-align: center;
     opacity: 0;
     transform: translateY(20px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(44, 62, 80, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(52, 152, 219, 0.4), 0 0 20px rgba(52, 152, 219, 0.3);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: rgba(52, 152, 219, 0.3);
+}
+
+.card:hover::before {
+    opacity: 1;
 }
 
 .card h3 {
     font-family: 'Roboto Slab', serif;
-    margin-bottom: 1rem;
-    color: #34495e;
+    margin: 1.5rem 0 1rem;
+    color: #2c3e50;
+    font-size: 1.4rem;
+    position: relative;
+    z-index: 1;
 }
 
 .card i {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #3498db, #2c3e50);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .card:hover i {
-    background: linear-gradient(135deg, #34495e, #2c3e50);
-    background-clip: text;
-    -webkit-background-clip: text;
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(5deg);
+}
+
+.card p {
+    color: #666;
+    line-height: 1.6;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 #contact form {
