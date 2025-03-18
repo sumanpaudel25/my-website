@@ -302,88 +302,10 @@ nav ul li a:hover::after {
     font-size: 1.5rem;
     max-width: 600px;
     margin: 1rem auto;
-    animation: fadeInUp 1s ease-out 0.5s;
-    opacity: 0;
-    animation-fill-mode: forwards;
+    opacity: 1;
 }
 
 .social-icons {
-    display: flex;
-}
-
-.contact-info-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-@media screen and (min-width: 768px) {
-    .contact-info-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    overflow: visible;
-    word-break: break-all;
-}
-
-.contact-item:hover {
-    background-color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.contact-item i {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-right: 0.5rem;
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-.contact-details {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    overflow: visible;
-    width: 100%;
-}
-
-.contact-label {
-    font-size: 0.9rem;
-    color: #666;
-    flex-shrink: 0;
-}
-
-.contact-label::after {
-    content: ":";
-    margin-left: 2px;
-}
-
-.contact-details a {
-    color: #2c3e50;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    word-break: break-all;
-    overflow: visible;
-}
-
-.contact-details a:hover {
-    color: #3498db;
-}
-
-.social-icons {    
     display: flex;
     justify-content: center;
     gap: 1rem;
@@ -408,9 +330,21 @@ nav ul li a:hover::after {
     transform: translateX(-50%);
     font-size: 2rem;
     color: #fff;
-    animation: bounce 2s infinite;
     cursor: pointer;
     z-index: 10;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-20px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-10px);
+    }
 }
 
 .btn {
@@ -423,15 +357,13 @@ nav ul li a:hover::after {
     transition: all 0.3s ease;
     font-weight: 600;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: fadeInUp 1s ease-out 1s;
-    opacity: 0;
-    animation-fill-mode: forwards;
+    opacity: 1;
     position: relative;
     overflow: hidden;
 }
 
 .btn:hover {
-    transform: translateY(-5px);
+
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -540,86 +472,42 @@ section h2::before {
     gap: 2rem;
 }
 
-@media (max-width: 992px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 576px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-}
-
 .card {
     background: #fff;
-    padding: 2.5rem 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
     text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(44, 62, 80, 0.1));
-    opacity: 0;
-    transition: opacity 0.4s ease;
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    border-color: rgba(52, 152, 219, 0.3);
-}
 
-.card:hover::before {
-    opacity: 1;
+    box-shadow: 0 20px 40px rgba(52, 152, 219, 0.4), 0 0 20px rgba(52, 152, 219, 0.3);
 }
 
 .card h3 {
     font-family: 'Roboto Slab', serif;
-    margin: 1.5rem 0 1rem;
-    color: #2c3e50;
-    font-size: 1.4rem;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 1rem;
+    color: #34495e;
 }
 
 .card i {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, #3498db, #2c3e50);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    transition: all 0.4s ease;
-    position: relative;
-    z-index: 1;
+    transition: all 0.3s ease;
 }
 
 .card:hover i {
-    transform: scale(1.15) rotate(5deg);
-}
-
-.card p {
-    color: #666;
-    line-height: 1.6;
-    margin-top: 1rem;
-    position: relative;
-    z-index: 1;
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    background-clip: text;
+    -webkit-background-clip: text;
+    transform: scale(1.1);
 }
 
 #contact form {
@@ -660,7 +548,7 @@ section h2::before {
 
 #contact form button:hover {
     background: #2b5977;
-    transform: translateY(-2px);
+
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -710,7 +598,7 @@ footer {
 }
 
 .download-btn:hover {
-    transform: translateY(-3px);
+
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -798,28 +686,7 @@ footer {
     z-index: 999;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0) translateX(-50%);
-    }
-    40% {
-        transform: translateY(-30px) translateX(-50%);
-    }
-    60% {
-        transform: translateY(-15px) translateX(-50%);
-    }
-}
 
 @keyframes slideIn {
     from {
